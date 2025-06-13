@@ -12,14 +12,14 @@ public class GroceryItemService
     }
 
     public async Task<GroceryItem?> CreateGroceryItemAsync(string name, decimal price, string description,
-        GroceryCategory? category = null)
+        int? categoryId = null)
     {
         GroceryItem? groceryItem = new GroceryItem
         {
             Name = name,
             Price = price,
             Description = description,
-            Category = category,
+            CategoryId = categoryId,
         };
         
         //Check constraints

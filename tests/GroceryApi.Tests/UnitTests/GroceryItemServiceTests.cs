@@ -60,7 +60,7 @@ public class GroceryItemServiceTests
         string itemName = "Cheddar cheese";
         decimal price = 12m;
         string description = "Yellow and delicious";
-        var item = await service.CreateGroceryItemAsync(itemName, price, description, category: null);
+        var item = await service.CreateGroceryItemAsync(itemName, price, description, categoryId: null);
         Assert.NotNull(item);
     }
 
@@ -75,11 +75,8 @@ public class GroceryItemServiceTests
         string itemName = "Cheddar cheese";
         decimal price = 12m;
         string description = "Yellow and delicious";
-        GroceryCategory category = new GroceryCategory()
-        {
-            Name = "Fake category123"
-        };
-        var item = await service.CreateGroceryItemAsync(itemName, price, description,  category);
+        int cateogryId = 1;
+        var item = await service.CreateGroceryItemAsync(itemName, price, description,  cateogryId);
         Assert.Null(item);
     }
 
