@@ -6,6 +6,6 @@ public class GroceryDbContext : DbContext
 {
     public GroceryDbContext(DbContextOptions<GroceryDbContext> options) : base(options)
     {
-        throw new NotImplementedException();
     }
+    public DbSet<GroceryItem> GroceryItems { get; set; }
 }

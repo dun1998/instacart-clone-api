@@ -12,9 +12,18 @@ public class GroceryItemService
     }
 
     public async Task<GroceryItem?> CreateGroceryItemAsync(string name, decimal price, string description,
-        GroceryCategory? category = null, int? stockQuantity = null)
+        GroceryCategory? category = null)
     {
-        return null;
+        GroceryItem? groceryItem = new GroceryItem
+        {
+            Name = name,
+            Price = price,
+            Description = description,
+            Category = category,
+        };
+        await  _context.AddAsync(groceryItem);
+        await _context.SaveChangesAsync();
+        return groceryItem;
     }
     
 }

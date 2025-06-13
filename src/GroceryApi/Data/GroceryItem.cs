@@ -7,7 +7,6 @@ public class GroceryItem
     public decimal Price { get; set; }
     public string Description { get; set; } = null!;
     public GroceryCategory? Category { get; set; } = null;
-    public int StockQuantity { get; set; } 
     
 
 }
