@@ -8,6 +8,7 @@ public class GroceryDbContext : DbContext
     {
     }
     public DbSet<GroceryItem> GroceryItems { get; set; }
+    public DbSet<GroceryCategory> GroceryCategories { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

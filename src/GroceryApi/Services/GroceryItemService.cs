@@ -1,4 +1,5 @@
 using GroceryApi.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace GroceryApi.Services;
 
@@ -23,9 +24,12 @@ public class GroceryItemService
         };
         
         //Check constraints
-        var itemExists = _context.GroceryItems.Any(i => 
+        var itemExists = await _context.GroceryItems.AnyAsync(i => 
             i.Name == groceryItem.Name && i.Price == groceryItem.Price);
-        if (itemExists)
+        var categoryExists = await _context.GroceryCategories.AnyAsync(i => 
+            i.Id == groceryItem.CategoryId);
+        
+        if (itemExists || !categoryExists)
         {
             return null;
         }
