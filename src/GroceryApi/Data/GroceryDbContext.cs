@@ -8,4 +8,12 @@ public class GroceryDbContext : DbContext
     {
     }
     public DbSet<GroceryItem> GroceryItems { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<GroceryItem>()
+            .HasIndex(b => new {b.Name, b.Price})
+            .IsUnique();
+    }
 }

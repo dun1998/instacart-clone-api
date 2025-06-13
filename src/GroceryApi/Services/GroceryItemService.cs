@@ -21,6 +21,14 @@ public class GroceryItemService
             Description = description,
             Category = category,
         };
+        
+        //Check constraints
+        var itemExists = _context.GroceryItems.Any(i => 
+            i.Name == groceryItem.Name && i.Price == groceryItem.Price);
+        if (itemExists)
+        {
+            return null;
+        }
         await  _context.AddAsync(groceryItem);
         await _context.SaveChangesAsync();
         return groceryItem;
