@@ -29,4 +29,24 @@ public class GroceryItemServiceTests
         Assert.Equal(groceryItem.Description, description);
 
     }
+
+    [Fact]
+    public async Task CreateGroceryItem_Should_Not_Allow_Duplicate_GroceryItems()
+    {
+        var options = new DbContextOptionsBuilder<GroceryDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+        using var context = new GroceryDbContext(options);
+        var service = new GroceryItemService(context);
+        string itemName = "Cheddar cheese";
+        decimal price = 12m;
+        string description = "Yellow and delicious";
+        
+        var item = await service.CreateGroceryItemAsync(itemName, price, description);
+        Assert.NotNull(item);
+        var item2 = await service.CreateGroceryItemAsync(itemName, price, description);
+        Assert.Null(item2);
+
+    }
+
 }
