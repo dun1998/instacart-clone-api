@@ -49,4 +49,38 @@ public class GroceryItemServiceTests
 
     }
 
+    [Fact]
+    public async Task CreateGroceryItem_Allows_Null_Category()
+    {
+        var  options = new DbContextOptionsBuilder<GroceryDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+        using var context = new GroceryDbContext(options);
+        var service = new GroceryItemService(context);
+        string itemName = "Cheddar cheese";
+        decimal price = 12m;
+        string description = "Yellow and delicious";
+        var item = await service.CreateGroceryItemAsync(itemName, price, description, category: null);
+        Assert.NotNull(item);
+    }
+
+    [Fact]
+    public async Task CreateGroceryItem_Should_ReturnNull_WhenCategoryDoesNotExist()
+    {
+        var  options = new DbContextOptionsBuilder<GroceryDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+        using var context = new GroceryDbContext(options);
+        var service = new GroceryItemService(context);
+        string itemName = "Cheddar cheese";
+        decimal price = 12m;
+        string description = "Yellow and delicious";
+        GroceryCategory category = new GroceryCategory()
+        {
+            Name = "Fake category123"
+        };
+        var item = await service.CreateGroceryItemAsync(itemName, price, description,  category);
+        Assert.Null(item);
+    }
+
 }
