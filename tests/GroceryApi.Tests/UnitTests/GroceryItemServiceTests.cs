@@ -1,4 +1,3 @@
-
 using GroceryApi.Data;
 using GroceryApi.Services;
 using Microsoft.EntityFrameworkCore;
@@ -10,12 +9,7 @@ public class GroceryItemServiceTests
     [Fact]
     public async Task CreateGroceryItem_Should_Create_GroceryItem()
     {
-        var options = new DbContextOptionsBuilder<GroceryDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // unique DB per test
-            .Options;
-
-        using var context = new GroceryDbContext(options);
-        
+        using var context = UnitTestUtil.CreatInMemoryDbContext();
         var service = new GroceryItemService(context);
         string itemName = "Cheddar cheese";
         decimal price = 12m;
@@ -33,10 +27,7 @@ public class GroceryItemServiceTests
     [Fact]
     public async Task CreateGroceryItem_Should_Not_Allow_Duplicate_GroceryItems()
     {
-        var options = new DbContextOptionsBuilder<GroceryDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
-        using var context = new GroceryDbContext(options);
+        using var context = UnitTestUtil.CreatInMemoryDbContext();
         var service = new GroceryItemService(context);
         string itemName = "Cheddar cheese";
         decimal price = 12m;
@@ -52,10 +43,7 @@ public class GroceryItemServiceTests
     [Fact]
     public async Task CreateGroceryItem_Allows_Null_Category()
     {
-        var  options = new DbContextOptionsBuilder<GroceryDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
-        using var context = new GroceryDbContext(options);
+        using var context = UnitTestUtil.CreatInMemoryDbContext();
         var service = new GroceryItemService(context);
         string itemName = "Cheddar cheese";
         decimal price = 12m;
@@ -67,10 +55,7 @@ public class GroceryItemServiceTests
     [Fact]
     public async Task CreateGroceryItem_Should_ReturnNull_WhenCategoryDoesNotExist()
     {
-        var  options = new DbContextOptionsBuilder<GroceryDbContext>()
-            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
-            .Options;
-        using var context = new GroceryDbContext(options);
+        using var context = UnitTestUtil.CreatInMemoryDbContext();
         var service = new GroceryItemService(context);
         string itemName = "Cheddar cheese";
         decimal price = 12m;
