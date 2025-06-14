@@ -19,7 +19,7 @@ A RESTful API backend for ordering groceries, inspired by services like Instacar
 ## Getting Started
 ```bash
 # Clone the repo
-git clone https://github.com/yourname/grocery-api-dotnet.git
+git clone https://github.com/dun1998/grocery-api-dotnet.git
 
 # Open in Visual Studio or VS Code and run migrations
 dotnet ef database update
