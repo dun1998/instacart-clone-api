@@ -29,7 +29,7 @@ public class GroceryItemService
         var categoryExists = await _context.GroceryCategories.AnyAsync(i => 
             i.Id == groceryItem.CategoryId);
         
-        if (itemExists || !categoryExists)
+        if (itemExists || (!categoryExists&& categoryId.HasValue))
         {
             return null;
         }
