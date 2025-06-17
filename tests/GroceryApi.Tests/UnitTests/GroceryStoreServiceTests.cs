@@ -47,4 +47,28 @@ public class GroceryStoreServiceTests
         var result = await service.CreateGroceryStoreAsync(storeName, companyId, address);
         Assert.Null(result);
     }
+
+    [Fact]
+    public async Task CreateGroceryStore_Should_ReturnNull_With_Duplicate_GroceryStore()
+    {
+        await using var context = UnitTestUtil.CreatInMemoryDbContext();
+        var storeName = "My Store";
+        var companyId = 1;
+        var address = "123 456 789";
+        GroceryCompany company = new GroceryCompany()
+        {
+            Id = companyId,
+            Name = "Grocery Company"
+        };
+        await context.GroceryCompanies.AddAsync(company);
+        await context.SaveChangesAsync();
+        var mockLogger = new Mock<ILogger<GroceryStoreService>>();
+        GroceryStoreService service = new GroceryStoreService(mockLogger.Object, context);
+
+        var result = await service.CreateGroceryStoreAsync(storeName, companyId, address);
+        var result2 = await service.CreateGroceryStoreAsync(storeName, companyId, address);
+
+        Assert.NotNull(result);
+        Assert.Null(result2);
+    }
 }

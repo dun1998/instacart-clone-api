@@ -19,5 +19,9 @@ public class GroceryDbContext : DbContext
         modelBuilder.Entity<GroceryItem>()
             .HasIndex(b => new { b.Name })
             .IsUnique();
+
+        modelBuilder.Entity<GroceryStore>()
+            .HasIndex(b => new { b.Name, b.CompanyId })
+            .IsUnique();
     }
 }
