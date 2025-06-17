@@ -13,8 +13,15 @@ public class GroceryCompanyService
         _context = context;
     }
 
-    public async Task<GroceryCompany> CreateGroceryCompany(string name)
+    public async Task<GroceryCompany?> CreateGroceryCompany(string name)
     {
-        throw new NotImplementedException();
+        GroceryCompany company = new GroceryCompany()
+        {
+            Name = name
+        };
+
+        await _context.GroceryCompanies.AddAsync(company);
+        await _context.SaveChangesAsync();
+        return company;
     }
 }

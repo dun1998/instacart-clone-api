@@ -1,5 +1,6 @@
 using GroceryApi.Data;
 using GroceryApi.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -16,7 +17,11 @@ public class GroceryCompanyServiceTests
         var service = new GroceryCompanyService(logger.Object, context);
 
         GroceryCompany? company = await service.CreateGroceryCompany(companyName);
-
         Assert.NotNull(company);
+        Assert.Equal(companyName, company.Name);
+        Assert.True(
+            await context.GroceryCompanies
+                .AnyAsync(groceryCompany => groceryCompany.Id == company.Id &&
+                                            groceryCompany.Name == company.Name));
     }
 }
