@@ -24,4 +24,19 @@ public class GroceryStoreServiceTests
         Assert.Equal(companyId, store.CompanyId);
         Assert.Equal(address, store.Address);
     }
+
+    [Fact]
+    public async Task CreateGroceryStore_Should_ReturnNull_With_Invalid_CompanyId()
+    {
+        await using var context = UnitTestUtil.CreatInMemoryDbContext();
+        var storeName = "My Store";
+        var companyId = 1;
+        var address = "123 456 789";
+        var mockLogger = new Mock<ILogger<GroceryStoreService>>();
+
+        GroceryStoreService service = new GroceryStoreService(mockLogger.Object, context);
+
+        var result = await service.CreateGroceryStoreAsync(storeName, companyId, address);
+        Assert.Null(result);
+    }
 }
