@@ -1,4 +1,5 @@
 using GroceryApi.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace GroceryApi.Services;
 
@@ -15,11 +16,16 @@ public class GroceryCompanyService
 
     public async Task<GroceryCompany?> CreateGroceryCompany(string name)
     {
+        var companyExists = await _context.GroceryCompanies.AnyAsync(c => c.Name == name);
+        if (companyExists)
+        {
+            return null;
+        }
+
         GroceryCompany company = new GroceryCompany()
         {
             Name = name
         };
-
         await _context.GroceryCompanies.AddAsync(company);
         await _context.SaveChangesAsync();
         return company;
