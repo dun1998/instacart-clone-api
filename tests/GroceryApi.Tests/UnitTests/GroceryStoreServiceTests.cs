@@ -11,6 +11,14 @@ public class GroceryStoreServiceTests
     public async Task CreateGroceryStore_Should_Create_GroceryStore()
     {
         await using var context = UnitTestUtil.CreatInMemoryDbContext();
+        GroceryCompany company = new GroceryCompany()
+        {
+            Id = 1,
+            Name = "Grocery Company"
+        };
+        await context.GroceryCompanies.AddAsync(company);
+        await context.SaveChangesAsync();
+
         var storeName = "My Store";
         var companyId = 1;
         var address = "123 456 789";
