@@ -13,8 +13,18 @@ public class GroceryStoreService
         _logger = logger;
     }
 
-    public Task<GroceryStore> CreateGroceryStoreAsync()
+    public async Task<GroceryStore?> CreateGroceryStoreAsync(string name, int companyId, string address)
     {
-        throw new NotImplementedException();
+        GroceryStore store = new GroceryStore()
+        {
+            Name = name,
+            CompanyId = companyId,
+            Address = address
+        };
+
+
+        await _context.AddAsync(store);
+        await _context.SaveChangesAsync();
+        return store;
     }
 }
