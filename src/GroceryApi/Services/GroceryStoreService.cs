@@ -1,4 +1,5 @@
 using GroceryApi.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace GroceryApi.Services;
 
@@ -22,6 +23,13 @@ public class GroceryStoreService
             Address = address
         };
 
+        var companyExists = await _context.GroceryCompanies
+            .AnyAsync(c => c.Id == companyId);
+
+        if (!companyExists)
+        {
+            return null;
+        }
 
         await _context.AddAsync(store);
         await _context.SaveChangesAsync();
