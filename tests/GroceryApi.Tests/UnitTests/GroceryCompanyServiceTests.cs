@@ -24,4 +24,18 @@ public class GroceryCompanyServiceTests
                 .AnyAsync(groceryCompany => groceryCompany.Id == company.Id &&
                                             groceryCompany.Name == company.Name));
     }
+
+    [Fact]
+    public async Task CreateGroceryCompany_Should_ReturnNull_With_Duplicate_GroceryStore()
+    {
+        await using var context = UnitTestUtil.CreatInMemoryDbContext();
+        var companyName = "My Company";
+        var logger = new Mock<ILogger<GroceryCompanyService>>();
+        var service = new GroceryCompanyService(logger.Object, context);
+
+        GroceryCompany? company = await service.CreateGroceryCompany(companyName);
+        Assert.NotNull(company);
+        GroceryCompany? company2 = await service.CreateGroceryCompany(companyName);
+        Assert.Null(company2);
+    }
 }
