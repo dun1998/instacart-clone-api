@@ -13,8 +13,21 @@ public class GroceryCompanyItemService
         _context = context;
     }
 
-    public async Task<GroceryCompanyItem?> CreateGroceryCompanyItemAsync()
+    public async Task<GroceryCompanyItem?> CreateGroceryCompanyItemAsync(int companyId, int groceryItemId,
+        double? price)
     {
-        throw new NotImplementedException();
+        DateTime createdDate = DateTime.Now;
+        GroceryCompanyItem groceryCompanyItem = new GroceryCompanyItem()
+        {
+            CompanyId = companyId,
+            GroceryItemId = groceryItemId,
+            Price = price,
+            CreatedDate = createdDate,
+            ModifiedDate = createdDate
+        };
+
+        await _context.GroceryCompanyItems.AddAsync(groceryCompanyItem);
+        await _context.SaveChangesAsync();
+        return groceryCompanyItem;
     }
 }

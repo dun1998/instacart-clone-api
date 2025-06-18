@@ -7,7 +7,7 @@ public class GroceryCompanyItem
     public GroceryItem GroceryItem { get; set; } = null!;
     public int CompanyId { get; set; }
     public GroceryCompany Company { get; set; } = null!;
-    public decimal? Price { get; set; }
+    public double? Price { get; set; }
     public required DateTime CreatedDate { get; set; }
     public required DateTime ModifiedDate { get; set; }
 }

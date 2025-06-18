@@ -9,10 +9,10 @@ public class GroceryCompanyItemServiceTests
 {
     [Theory]
     [InlineData(null)]
-    [InlineData(1)]
-    [InlineData(0)]
-    [InlineData(0.0000000000000000000000000001)]
-    public async Task CreateGroceryCompanyItem_WithValidData_ReturnsGroceryCompanyItem(decimal? price)
+    [InlineData(1.0)]
+    [InlineData(0.0)]
+    [InlineData(0.000000000000000000000000001)]
+    public async Task CreateGroceryCompanyItem_WithValidData_ReturnsGroceryCompanyItem(double? price)
     {
         var context = UnitTestUtil.CreatInMemoryDbContext();
         var companyId = 1;
@@ -40,9 +40,10 @@ public class GroceryCompanyItemServiceTests
         await context.SaveChangesAsync();
 
         var service = new GroceryCompanyItemService(logger, context);
-        var groceryCompanyItem = await service.CreateGroceryCompanyItemAsync();
+        var groceryCompanyItem = await service.CreateGroceryCompanyItemAsync(companyId, groceryItemId, price);
 
         Assert.NotNull(groceryCompanyItem);
+        Assert.NotNull(groceryCompanyItem.Id);
         Assert.Equal(groceryCompanyItem.CompanyId, companyId);
         Assert.Equal(groceryCompanyItem.GroceryItemId, groceryItemId);
         Assert.Equal(groceryCompanyItem.Price, price);
