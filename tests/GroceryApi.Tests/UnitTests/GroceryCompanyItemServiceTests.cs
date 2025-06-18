@@ -92,4 +92,28 @@ public class GroceryCompanyItemServiceTests
             await service.CreateGroceryCompanyItemAsync(companyId, groceryItemId, price2);
         Assert.Null(companyItemDupe);
     }
+
+    [Fact]
+    public async Task CreateGroceryCompanyItem_WithInvalidGroceryItem_ReturnsNull()
+    {
+        var context = UnitTestUtil.CreatInMemoryDbContext();
+        ILogger<GroceryCompanyItemService> logger = new Mock<ILogger<GroceryCompanyItemService>>().Object;
+
+        var companyId = 1;
+        var groceryItemId = 1;
+
+        GroceryCompany company = new GroceryCompany()
+        {
+            Id = companyId,
+            Name = "Grocery Company",
+        };
+        await context.GroceryCompanies.AddAsync(company);
+
+        await context.SaveChangesAsync();
+        var service = new GroceryCompanyItemService(logger, context);
+
+        GroceryCompanyItem? companyItem = await service.CreateGroceryCompanyItemAsync(companyId, groceryItemId, null);
+
+        Assert.Null(companyItem);
+    }
 }
