@@ -14,7 +14,7 @@ public class GroceryCompanyItemService
     }
 
     public async Task<GroceryCompanyItem?> CreateGroceryCompanyItemAsync(int companyId, int groceryItemId,
-        double? price)
+        decimal? price)
     {
         DateTime createdDate = DateTime.Now;
         GroceryCompanyItem groceryCompanyItem = new GroceryCompanyItem()

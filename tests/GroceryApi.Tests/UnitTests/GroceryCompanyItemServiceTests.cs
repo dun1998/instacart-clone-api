@@ -9,11 +9,12 @@ public class GroceryCompanyItemServiceTests
 {
     [Theory]
     [InlineData(null)]
-    [InlineData(1.0)]
-    [InlineData(0.0)]
-    [InlineData(0.000000000000000000000000001)]
-    public async Task CreateGroceryCompanyItem_WithValidData_ReturnsGroceryCompanyItem(double? price)
+    [InlineData("1.0")]
+    [InlineData("0.0")]
+    [InlineData("0.000000000000000000000000001")]
+    public async Task CreateGroceryCompanyItem_WithValidData_ReturnsGroceryCompanyItem(string? priceString)
     {
+        decimal? price = priceString != null ? decimal.Parse(priceString) : null;
         var context = UnitTestUtil.CreatInMemoryDbContext();
         var companyId = 1;
         var groceryItemId = 1;
@@ -43,7 +44,7 @@ public class GroceryCompanyItemServiceTests
         var groceryCompanyItem = await service.CreateGroceryCompanyItemAsync(companyId, groceryItemId, price);
 
         Assert.NotNull(groceryCompanyItem);
-        Assert.NotNull(groceryCompanyItem.Id);
+        Assert.True(groceryCompanyItem.Id > 0);
         Assert.Equal(groceryCompanyItem.CompanyId, companyId);
         Assert.Equal(groceryCompanyItem.GroceryItemId, groceryItemId);
         Assert.Equal(groceryCompanyItem.Price, price);
@@ -51,12 +52,14 @@ public class GroceryCompanyItemServiceTests
 
     [Theory]
     [InlineData(null, null)]
-    [InlineData(1.0, 1.0)]
-    [InlineData(0.0, null)]
-    [InlineData(null, 0.0)]
-    [InlineData(double.MaxValue, 0.0)]
-    public async Task CreateGroceryCompanyItem_WithDuplicateData_ReturnsNull(double? price, double? price2)
+    [InlineData("1.0", "1.0")]
+    [InlineData("0.0", null)]
+    [InlineData(null, "0.0")]
+    [InlineData("100000000000.0", "0")]
+    public async Task CreateGroceryCompanyItem_WithDuplicateData_ReturnsNull(string? priceString, string? priceString2)
     {
+        decimal? price = priceString != null ? decimal.Parse(priceString) : null;
+        decimal? price2 = priceString2 != null ? decimal.Parse(priceString2) : null;
         var context = UnitTestUtil.CreatInMemoryDbContext();
         ILogger<GroceryCompanyItemService> logger = new Mock<ILogger<GroceryCompanyItemService>>().Object;
 
