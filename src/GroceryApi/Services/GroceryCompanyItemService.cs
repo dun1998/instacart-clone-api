@@ -1,4 +1,5 @@
 using GroceryApi.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace GroceryApi.Services;
 
@@ -25,6 +26,13 @@ public class GroceryCompanyItemService
             CreatedDate = createdDate,
             ModifiedDate = createdDate
         };
+
+        bool itemExists = await _context.GroceryCompanyItems
+            .AnyAsync(x => x.CompanyId == companyId && x.GroceryItemId == groceryItemId);
+        if (itemExists)
+        {
+            return null;
+        }
 
         await _context.GroceryCompanyItems.AddAsync(groceryCompanyItem);
         await _context.SaveChangesAsync();
