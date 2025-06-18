@@ -1,5 +1,6 @@
 using GroceryApi.Data;
 using GroceryApi.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace GroceryApi.Tests.UnitTests;
 
@@ -11,15 +12,15 @@ public class GroceryItemServiceTests
         using var context = UnitTestUtil.CreatInMemoryDbContext();
         var service = new GroceryItemService(context);
         string itemName = "Cheddar cheese";
-        decimal price = 12m;
         string description = "Yellow and delicious";
 
-        GroceryItem? groceryItem = await service.CreateGroceryItemAsync(itemName, price, description);
+        GroceryItem? groceryItem = await service.CreateGroceryItemAsync(itemName, description);
         Assert.NotNull(groceryItem);
-
         Assert.Equal(groceryItem.Name, itemName);
-        Assert.Equal(groceryItem.Price, price);
         Assert.Equal(groceryItem.Description, description);
+        bool isInContext = await context.GroceryItems.AnyAsync(x =>
+            x.Name == itemName && x.Description == description && x.Id == groceryItem.Id);
+        Assert.True(isInContext);
     }
 
     [Fact]
@@ -28,12 +29,11 @@ public class GroceryItemServiceTests
         using var context = UnitTestUtil.CreatInMemoryDbContext();
         var service = new GroceryItemService(context);
         string itemName = "Cheddar cheese";
-        decimal price = 12m;
         string description = "Yellow and delicious";
 
-        var item = await service.CreateGroceryItemAsync(itemName, price, description);
+        var item = await service.CreateGroceryItemAsync(itemName, description);
         Assert.NotNull(item);
-        var item2 = await service.CreateGroceryItemAsync(itemName, price, description);
+        var item2 = await service.CreateGroceryItemAsync(itemName, description);
         Assert.Null(item2);
     }
 
@@ -43,10 +43,12 @@ public class GroceryItemServiceTests
         using var context = UnitTestUtil.CreatInMemoryDbContext();
         var service = new GroceryItemService(context);
         string itemName = "Cheddar cheese";
-        decimal price = 12m;
         string description = "Yellow and delicious";
-        var item = await service.CreateGroceryItemAsync(itemName, price, description, categoryId: null);
+        var item = await service.CreateGroceryItemAsync(itemName, description, categoryId: null);
         Assert.NotNull(item);
+        var isInContext = await context.GroceryItems
+            .AnyAsync(x => x.Name == itemName && x.Description == description && x.Id == item.Id);
+        Assert.True(isInContext);
     }
 
     [Fact]
@@ -55,10 +57,9 @@ public class GroceryItemServiceTests
         using var context = UnitTestUtil.CreatInMemoryDbContext();
         var service = new GroceryItemService(context);
         string itemName = "Cheddar cheese";
-        decimal price = 12m;
         string description = "Yellow and delicious";
         int cateogryId = 1;
-        var item = await service.CreateGroceryItemAsync(itemName, price, description, cateogryId);
+        var item = await service.CreateGroceryItemAsync(itemName, description, cateogryId);
         Assert.Null(item);
     }
 }

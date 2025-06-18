@@ -12,30 +12,25 @@ public class GroceryItemService
         _context = context;
     }
 
-    public async Task<GroceryItem?> CreateGroceryItemAsync(string name, decimal price, string description,
+    public async Task<GroceryItem?> CreateGroceryItemAsync(string name, string description,
         int? categoryId = null)
     {
-        GroceryItem? groceryItem = new GroceryItem
+        var groceryItem = new GroceryItem
         {
             Name = name,
-            Price = price,
             Description = description,
-            CategoryId = categoryId,
+            CategoryId = categoryId
         };
-        
+
         //Check constraints
-        var itemExists = await _context.GroceryItems.AnyAsync(i => 
-            i.Name == groceryItem.Name && i.Price == groceryItem.Price);
-        var categoryExists = await _context.GroceryCategories.AnyAsync(i => 
+        var itemExists = await _context.GroceryItems.AnyAsync(i =>
+            i.Name == groceryItem.Name);
+        var categoryExists = await _context.GroceryCategories.AnyAsync(i =>
             i.Id == groceryItem.CategoryId);
-        
-        if (itemExists || (!categoryExists&& categoryId.HasValue))
-        {
-            return null;
-        }
-        await  _context.AddAsync(groceryItem);
+
+        if (itemExists || (!categoryExists && categoryId.HasValue)) return null;
+        await _context.AddAsync(groceryItem);
         await _context.SaveChangesAsync();
         return groceryItem;
     }
-    
 }
