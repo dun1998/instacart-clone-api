@@ -141,4 +141,43 @@ public class GroceryCompanyItemServiceTests
         GroceryCompanyItem? companyItem = await service.CreateGroceryCompanyItemAsync(companyId, groceryItemId, null);
         Assert.Null(companyItem);
     }
+
+    [Theory]
+    [InlineData("-1")]
+    [InlineData("-1000.1")]
+    [InlineData("-0.0000000000000001")]
+    [InlineData("-99999999999999999999999")]
+    public async Task CreateGroceryCompanyItem_WithNegativePrice_ReturnsNull(string? priceString)
+    {
+        decimal? price = priceString != null ? decimal.Parse(priceString) : null;
+        var context = UnitTestUtil.CreatInMemoryDbContext();
+        var companyId = 1;
+        var groceryItemId = 1;
+        ILogger<GroceryCompanyItemService> logger = new Mock<ILogger<GroceryCompanyItemService>>().Object;
+
+        GroceryCompany company = new GroceryCompany()
+        {
+            Id = companyId,
+            Name = "Grocery Company",
+        };
+        await context.GroceryCompanies.AddAsync(company);
+
+        GroceryItem groceryItem = new GroceryItem()
+        {
+            Id = groceryItemId,
+            Name = "Grocery Item",
+            Category = null,
+            CategoryId = null,
+            Description = "A grocery item",
+            CreatedDate = DateTime.Now,
+            ModifiedDate = DateTime.Now
+        };
+        await context.GroceryItems.AddAsync(groceryItem);
+        await context.SaveChangesAsync();
+
+        var service = new GroceryCompanyItemService(logger, context);
+        var groceryCompanyItem = await service.CreateGroceryCompanyItemAsync(companyId, groceryItemId, price);
+
+        Assert.Null(groceryCompanyItem);
+    }
 }
