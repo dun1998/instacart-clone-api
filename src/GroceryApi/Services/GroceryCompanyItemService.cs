@@ -29,7 +29,8 @@ public class GroceryCompanyItemService
 
         bool itemExists = await _context.GroceryCompanyItems
             .AnyAsync(x => x.CompanyId == companyId && x.GroceryItemId == groceryItemId);
-        if (itemExists)
+        bool groceryItemExists = await _context.GroceryItems.AnyAsync(g => g.Id == groceryItemId);
+        if (itemExists || !groceryItemExists)
         {
             return null;
         }
