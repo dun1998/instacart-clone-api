@@ -38,6 +38,6 @@ public class GroceryItemService
     {
         var itemExists = await _context.GroceryItems.AnyAsync(i => i.Id == groceryItemId);
         if (!itemExists) return null;
-        return await _context.GroceryItems.FirstOrDefaultAsync(i => i.Id == groceryItemId);
+        return await _context.GroceryItems.AsNoTracking().FirstOrDefaultAsync(i => i.Id == groceryItemId);
     }
 }
