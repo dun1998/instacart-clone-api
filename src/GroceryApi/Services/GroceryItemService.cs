@@ -36,6 +36,8 @@ public class GroceryItemService
 
     public async Task<GroceryItem?> ReadGroceryItemAsync(int groceryItemId)
     {
-        throw new NotImplementedException();
+        var itemExists = await _context.GroceryItems.AnyAsync(i => i.Id == groceryItemId);
+        if (!itemExists) return null;
+        return await _context.GroceryItems.FirstOrDefaultAsync(i => i.Id == groceryItemId);
     }
 }
