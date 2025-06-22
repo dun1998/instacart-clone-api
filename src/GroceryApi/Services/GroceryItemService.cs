@@ -33,4 +33,9 @@ public class GroceryItemService
         await _context.SaveChangesAsync();
         return groceryItem;
     }
+
+    public async Task<GroceryItem?> ReadGroceryItemAsync(int groceryItemId)
+    {
+        throw new NotImplementedException();
+    }
 }

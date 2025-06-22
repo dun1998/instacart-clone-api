@@ -62,4 +62,15 @@ public class GroceryItemServiceTests
         var item = await service.CreateGroceryItemAsync(itemName, description, cateogryId);
         Assert.Null(item);
     }
+
+    [Fact]
+    public async Task ReadGroceryItem_NonExistingId_ReturnsNull()
+    {
+        using var context = UnitTestUtil.CreatInMemoryDbContext();
+        var service = new GroceryItemService(context);
+
+        int groceryItemId = 1;
+        var item = await service.ReadGroceryItemAsync(groceryItemId);
+        Assert.Null(item);
+    }
 }
