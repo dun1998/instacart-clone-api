@@ -73,4 +73,32 @@ public class GroceryItemServiceTests
         var item = await service.ReadGroceryItemAsync(groceryItemId);
         Assert.Null(item);
     }
+
+    [Fact]
+    public async Task ReadGroceryItem_ExistingId_ReturnsGroceryItem()
+    {
+        using var context = UnitTestUtil.CreatInMemoryDbContext();
+        string itemName = "Cheddar cheese";
+        string description = "Yellow and delicious";
+        int categoryId = 1;
+        int groceryId = 1;
+        string newItemName = "Pepperjack Cheese";
+        GroceryItem item = new GroceryItem()
+        {
+            Id = groceryId,
+            Name = itemName,
+            Description = description,
+            CategoryId = categoryId
+        };
+        await context.GroceryItems.AddAsync(item);
+        await context.SaveChangesAsync();
+        var service = new GroceryItemService(context);
+
+        var itemDupe = await service.ReadGroceryItemAsync(groceryId);
+
+        Assert.NotNull(itemDupe);
+        Assert.Equal(item, itemDupe);
+        item.Name = newItemName;
+        Assert.NotEqual(item, itemDupe);
+    }
 }
