@@ -82,7 +82,7 @@ public class GroceryItemServiceTests
         string description = "Yellow and delicious";
         int categoryId = 1;
         int groceryId = 1;
-        string newItemName = "Pepperjack Cheese";
+        string newItemName = "Pepper jack Cheese";
         GroceryItem item = new GroceryItem()
         {
             Id = groceryId,

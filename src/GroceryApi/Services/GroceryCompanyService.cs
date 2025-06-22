@@ -19,6 +19,7 @@ public class GroceryCompanyService
         var companyExists = await _context.GroceryCompanies.AnyAsync(c => c.Name == name);
         if (companyExists)
         {
+            _logger.LogDebug("Company with that name already exists");
             return null;
         }
 

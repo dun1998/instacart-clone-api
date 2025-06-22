@@ -33,6 +33,7 @@ public class GroceryCompanyItemService
         bool groceryCompanyExists = await _context.GroceryCompanies.AnyAsync(g => g.Id == companyId);
         if (itemExists || !groceryItemExists || !groceryCompanyExists || groceryCompanyItem.Price < 0)
         {
+            _logger.LogDebug("Failed to create grocery company item");
             return null;
         }
 
