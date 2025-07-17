@@ -28,6 +28,7 @@ public class GroceryStoreService
         var storeExists = await _context.GroceryStores.AnyAsync(g => g.CompanyId == companyId && g.Name == name);
         if (!companyExists | storeExists)
         {
+            _logger.LogDebug("Failed to create grocery store");
             return null;
         }
 

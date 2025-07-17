@@ -7,7 +7,7 @@ namespace GroceryApi.Tests.UnitTests;
 public class GroceryItemServiceTests
 {
     [Fact]
-    public async Task CreateGroceryItem_Should_Create_GroceryItem()
+    public async Task CreateGroceryItem_WithValidData_ReturnsGroceryItem()
     {
         using var context = UnitTestUtil.CreatInMemoryDbContext();
         var service = new GroceryItemService(context);
@@ -24,7 +24,7 @@ public class GroceryItemServiceTests
     }
 
     [Fact]
-    public async Task CreateGroceryItem_Should_Not_Allow_Duplicate_GroceryItems()
+    public async Task CreateGroceryItem_WithDuplicateItem_ReturnsNull()
     {
         using var context = UnitTestUtil.CreatInMemoryDbContext();
         var service = new GroceryItemService(context);
@@ -38,7 +38,7 @@ public class GroceryItemServiceTests
     }
 
     [Fact]
-    public async Task CreateGroceryItem_Allows_Null_Category()
+    public async Task CreateGroceryItem_WithNoCategory_ReturnsGroceryItem()
     {
         using var context = UnitTestUtil.CreatInMemoryDbContext();
         var service = new GroceryItemService(context);
@@ -52,7 +52,7 @@ public class GroceryItemServiceTests
     }
 
     [Fact]
-    public async Task CreateGroceryItem_Should_ReturnNull_WhenCategoryDoesNotExist()
+    public async Task CreateGroceryItem_WithInvalidCategory_ReturnsNull()
     {
         using var context = UnitTestUtil.CreatInMemoryDbContext();
         var service = new GroceryItemService(context);
@@ -61,5 +61,44 @@ public class GroceryItemServiceTests
         int cateogryId = 1;
         var item = await service.CreateGroceryItemAsync(itemName, description, cateogryId);
         Assert.Null(item);
+    }
+
+    [Fact]
+    public async Task ReadGroceryItem_NonExistingId_ReturnsNull()
+    {
+        using var context = UnitTestUtil.CreatInMemoryDbContext();
+        var service = new GroceryItemService(context);
+
+        int groceryItemId = 1;
+        var item = await service.ReadGroceryItemAsync(groceryItemId);
+        Assert.Null(item);
+    }
+
+    [Fact]
+    public async Task ReadGroceryItem_ExistingId_ReturnsGroceryItem()
+    {
+        using var context = UnitTestUtil.CreatInMemoryDbContext();
+        string itemName = "Cheddar cheese";
+        string description = "Yellow and delicious";
+        int categoryId = 1;
+        int groceryId = 1;
+        string newItemName = "Pepper jack Cheese";
+        GroceryItem item = new GroceryItem()
+        {
+            Id = groceryId,
+            Name = itemName,
+            Description = description,
+            CategoryId = categoryId
+        };
+        await context.GroceryItems.AddAsync(item);
+        await context.SaveChangesAsync();
+        var service = new GroceryItemService(context);
+
+        var itemDupe = await service.ReadGroceryItemAsync(groceryId);
+
+        Assert.NotNull(itemDupe);
+        Assert.Equal(item, itemDupe);
+        item.Name = newItemName;
+        Assert.NotEqual(item, itemDupe);
     }
 }

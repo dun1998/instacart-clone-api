@@ -8,7 +8,7 @@ namespace GroceryApi.Tests.UnitTests;
 public class GroceryStoreServiceTests
 {
     [Fact]
-    public async Task CreateGroceryStore_Should_Create_GroceryStore()
+    public async Task CreateGroceryStore_WithValidData_ReturnsGroceryStore()
     {
         await using var context = UnitTestUtil.CreatInMemoryDbContext();
         GroceryCompany company = new GroceryCompany()
@@ -34,7 +34,7 @@ public class GroceryStoreServiceTests
     }
 
     [Fact]
-    public async Task CreateGroceryStore_Should_ReturnNull_With_Invalid_CompanyId()
+    public async Task CreateGroceryStore_InvalidCompanyId_ReturnsNull()
     {
         await using var context = UnitTestUtil.CreatInMemoryDbContext();
         var storeName = "My Store";
@@ -49,7 +49,7 @@ public class GroceryStoreServiceTests
     }
 
     [Fact]
-    public async Task CreateGroceryStore_Should_ReturnNull_With_Duplicate_GroceryStore()
+    public async Task CreateGroceryStore_WithDuplicateData_ReturnsNull()
     {
         await using var context = UnitTestUtil.CreatInMemoryDbContext();
         var storeName = "My Store";
