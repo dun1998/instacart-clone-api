@@ -7,7 +7,7 @@ namespace GroceryApi.Tests.UnitTests;
 public class GroceryItemServiceTests
 {
     [Fact]
-    public async Task CreateGroceryItem_Should_Create_GroceryItem()
+    public async Task CreateGroceryItem_WithValidData_ReturnsGroceryItem()
     {
         using var context = UnitTestUtil.CreatInMemoryDbContext();
         var service = new GroceryItemService(context);
@@ -24,7 +24,7 @@ public class GroceryItemServiceTests
     }
 
     [Fact]
-    public async Task CreateGroceryItem_Should_Not_Allow_Duplicate_GroceryItems()
+    public async Task CreateGroceryItem_WithDuplicateItem_ReturnsNull()
     {
         using var context = UnitTestUtil.CreatInMemoryDbContext();
         var service = new GroceryItemService(context);
@@ -38,7 +38,7 @@ public class GroceryItemServiceTests
     }
 
     [Fact]
-    public async Task CreateGroceryItem_Allows_Null_Category()
+    public async Task CreateGroceryItem_WithNoCategory_ReturnsGroceryItem()
     {
         using var context = UnitTestUtil.CreatInMemoryDbContext();
         var service = new GroceryItemService(context);
@@ -52,7 +52,7 @@ public class GroceryItemServiceTests
     }
 
     [Fact]
-    public async Task CreateGroceryItem_Should_ReturnNull_WhenCategoryDoesNotExist()
+    public async Task CreateGroceryItem_WithInvalidCategory_ReturnsNull()
     {
         using var context = UnitTestUtil.CreatInMemoryDbContext();
         var service = new GroceryItemService(context);
